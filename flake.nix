@@ -1,5 +1,5 @@
 {
-  description = "A simple framework for using ports and ips in nix";
+  description = "A simple framework for using ports, ips and macs in nix";
 
   inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; };
   outputs = { nixpkgs, ... }: rec {
@@ -11,7 +11,8 @@
     nixosModules = rec {
       ports = import ./ports.nix;
       ips = import ./ips.nix;
-      default = { imports = [ ports ips ]; };
+      macs = import ./macs.nix;
+      default = { imports = [ ports ips macs ]; };
     };
   };
 

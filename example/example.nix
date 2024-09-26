@@ -39,6 +39,8 @@
       "192.168.178.3" = "a%eth0:"; # same as without. do not add to anything
     };
   };
+
+  macs = { host1 = { "02:01" = { "00:00:00:01" = "test%br0"; }; }; };
 }
 
 #maps to: contents in example_eval.nix
