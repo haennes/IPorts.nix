@@ -4,7 +4,7 @@ let
   inherit (lib.types) anything submodule attrsOf;
   inherit (lib)
     mkOption mkEnableOption mapAttrs concatStringsSep mapAttrsRecursive collect
-    isList isInt last head tail replaceStrings stringLength genList
+    isList isInt toIntBase10 last head tail replaceStrings stringLength genList
     stringToCharacters toList imap0 flatten setAttrByPath splitString length
     mapAttrsRecursiveCond groupBy removeAttrs filter attrValues elem;
 
@@ -52,11 +52,12 @@ let
         new_value =
           if isInt (head list_value) then tail list_value else list_value;
       in imap0 (idx: service: {
-        port = (concatStringsSep "" ([ path_clean ] ++ (if isList value then
-          let offset = if isInt (head value) then head value else 0;
-          in [ (intToStringFixedLength idx offset count_x) ]
-        else
-          [ ])));
+        port = toIntBase10 (concatStringsSep "" ([ path_clean ]
+          ++ (if isList value then
+            let offset = if isInt (head value) then head value else 0;
+            in [ (intToStringFixedLength idx offset count_x) ]
+          else
+            [ ])));
         inherit service;
       }) new_value) set);
 
