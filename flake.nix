@@ -6,12 +6,12 @@
 
     nixosConfigurations.host1 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ ./example/example.nix nixosModules.ports nixosModules.ips ];
+      modules = [ ./example/example.nix nixosModules.default ];
     };
     nixosModules = rec {
       ports = import ./ports.nix;
       ips = import ./ips.nix;
-      default = import ./both.nix;
+      default = { imports = [ ports ips ]; };
     };
   };
 
