@@ -9,6 +9,7 @@ let
     mapAttrsRecursiveCond groupBy removeAttrs filter attrValues elem;
 
   hostname = config.networking.hostName;
+  cfg = config.ports;
   cfgp = config.ports.ports;
   portstring_to_attrs = str:
     let
@@ -89,11 +90,16 @@ let
     (_: x: x.port) set;
 in {
   options.ports = mkOption {
+    default = {
+      addToFirewall.enable = false;
+      ports = { };
+    };
     type = (submodule {
       options = {
         addToFirewall.enable = mkEnableOption "Enable port management";
         ports = mkOption {
           type = attrsOf (anything);
+          default = { };
           description = "";
 
           apply = old: rec {
@@ -122,7 +128,7 @@ in {
     });
   };
 
-  config = let
+  config = lib.mkIf (cfg.addToFirewall.enable) (let
     forwards = filter (x: x.forward != null) (attrValues cfgp.curr_flattened);
     by_interface = groupBy (a:
       let intf = a.forward.interface;
@@ -150,6 +156,5 @@ in {
         allowedUDPPorts = udpp value;
       }) by_interface_non_global;
     };
-
-  };
+  });
 }

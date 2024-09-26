@@ -38,6 +38,7 @@ let
 in {
   options.macs = mkOption {
     type = attrsOf (anything);
+    default = { };
     description = "";
     apply = old: rec {
       raw = old;

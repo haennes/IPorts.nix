@@ -45,6 +45,7 @@ in {
       options = {
         ips = mkOption {
           type = attrsOf (anything);
+          default = { };
           description = "";
           apply = old: rec {
             raw = old;
