@@ -1,3 +1,0 @@
-#!/bin/sh
-nix flake lock --update-input ports
-nix repl
